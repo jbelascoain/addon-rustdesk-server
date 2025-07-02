@@ -1,0 +1,44 @@
+#include <tunables/global>
+
+profile rustdesk_server flags=(attach_disconnected,mediate_deleted) {
+  #include <abstractions/base>
+  
+  # Capabilities
+  file,
+  signal (send) set=(kill,term,int,hup,cont),
+  
+  # --- Acceso a Red ---
+  network tcp,
+  network udp,
+
+  # S6-Overlay
+  /init ix,
+  /bin/** ix,
+  /usr/bin/** ix,
+  /run/{s6,s6-rc*,service}/** ix,
+  /package/** ix,
+  /command/** ix,
+  /etc/services.d/** rwix,
+  /etc/cont-init.d/** rwix,
+  /etc/cont-finish.d/** rwix,
+  /run/{,**} rwk,
+  /bin/bash rix,
+  /bin/echo ix,
+  /etc/passwd r,
+
+  # Bashio
+  /usr/lib/bashio/** ix,
+  /tmp/** rwk,
+
+  # Access to options.json and other files within your addon
+  /data/** rw,
+  /config/** rwk,
+
+  /lib/** mr,
+  /usr/lib/** mr,
+  /etc/ld.so.cache mr,
+  /etc/resolv.conf r,
+
+  deny capability net_raw,
+
+}

@@ -1,0 +1,38 @@
+name: RustDesk Server
+version: 1.0.18
+slug: rustdesk_server
+description: RustDesk Server addon for Home Assistant
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+startup: services
+init: false
+codenotary: codenotary@jbelascoain.dev
+apparmor: true
+host_network: false
+boot: auto
+options:
+  encrypted_only: true
+  relay_server: 127.0.0.1
+schema:
+  encrypted_only: bool
+  relay_server: str
+ports:
+  21115/tcp: 21115
+  21116/tcp: 21116
+  21116/udp: 21116
+  21117/tcp: 21117
+  21118/tcp: 21118
+  21119/tcp: 21119
+ports_description:
+  21115/tcp: 'hbbs: used for the NAT type test.'
+  21116/tcp: 'RustDesk Main Server (Signaling, WebSocket)'
+  21116/udp: 'RustDesk Main Server (Heartbeat, Hole Punching)'
+  21117/tcp: 'hbbr: used for the Relay services.'
+  21118/tcp: 'hbbs: used to support web clients.'
+  21119/tcp: 'hbbr: used to support web clients.'
+map:
+  - 'addon_config:rw'
