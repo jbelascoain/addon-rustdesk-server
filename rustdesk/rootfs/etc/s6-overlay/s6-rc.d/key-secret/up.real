@@ -1,0 +1,62 @@
+#!/command/with-contenv bashio
+sleep 2
+bashio::log.info "RUNNING KEYS"
+printenv
+if [ ! -d /config ] ; then
+mkdir /config
+fi
+
+bashio::log.info "Configuring ecryption" 
+# ENV variables
+if [ ! "$KEY_PUB" = "null" ] ; then
+  echo -n "$KEY_PUB" > /config/id_ed25519.pub
+  bashio::log.info "Public key created from ENV variable"
+fi
+
+if [ ! "$KEY_PRIV" = "null" ] ; then
+  echo -n "$KEY_PRIV" > /config/id_ed25519
+  bashio::log.info "Private key created from ENV variable"
+fi
+
+# normal docker secrets
+if [ ! -f /config/id_ed25519.pub ] && [ -r /run/secrets/key_pub ] ; then
+  cp /run/secrets/key_pub /config/id_ed25519.pub
+  bashio::log.info "Public key created from secret"
+fi
+
+if [ ! -f /config/id_ed25519 ] && [ -r /run/secrets/key_priv ] ; then
+  cp /run/secrets/key_priv /config/id_ed25519
+  bashio::log.info "Private key created from secret"
+fi
+
+# check if both keys provided
+if [ -f /config/id_ed25519.pub ] && [ ! -f /config/id_ed25519 ] ; then
+  bashio::log.error "Private key missing."
+  bashio::log.error "You must provide BOTH the private and the public key."
+  /run/s6/basedir/bin/halt
+  exit 1
+fi
+
+if [ ! -f /config/id_ed25519.pub ] && [ -f /config/id_ed25519 ] ; then
+  bashio::log.error "Public key missing."
+  bashio::log.error "You must provide BOTH the private and the public key."
+  /run/s6/basedir/bin/halt
+  exit 1
+fi
+
+# here we have either no keys or both
+
+# if we have both keys, we fix permissions and ownership
+# and check for keypair validation
+if [ -f /config/id_ed25519.pub ] && [ -f /config/id_ed25519 ] ; then
+  bashio::log.info "Validating keypair"
+  chmod 0600 /config/id_ed25519.pub /config/id_ed25519
+  chown root:root /config/id_ed25519.pub /config/id_ed25519
+  /usr/bin/rustdesk-utils validatekeypair "$(cat /config/id_ed25519.pub)" "$(cat /config/id_ed25519)" || {
+    bashio::log.error "Key pair not valid"
+    /run/s6/basedir/bin/halt
+    exit 1
+  }
+fi
+
+# if we have no keypair, hbbs will generate one

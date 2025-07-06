@@ -1,0 +1,30 @@
+configuration:
+  relay_server:
+    name: "Relay Server"
+    description: "The public address (domain or IP) of an external relay server. For most setups, this should be left blank to use the integrated relay."
+  always_use_relay:
+    name: "Always Use Relay"
+    description: "Forces all remote sessions to go through the relay server, disabling direct P2P connections. This increases server bandwidth usage and latency."
+  key_pub:
+    name: "Public Key (Optional)"
+    description: "Manually provide the server's public key (Base64 format). If left blank, the addon will use the key files generated in the data directory."
+  key_priv:
+    name: "Private Key (Optional)"
+    description: "WARNING: Insecure! Manually provide the server's private key. It is much safer to let the addon generate and use key files."
+  single_bandwidth:
+    name: "Single Connection Bandwidth Limit (Mbps)"
+    description: "Limits the maximum bandwidth for a single relay connection, in Mbps. Leave blank to use default [16 Mbps]."
+  total_bandwidth:
+    name: "Total Bandwidth Limit (Mbps)"
+    description: "Limits the total bandwidth that the relay server can use for all active connections, in Mbps. Leave blank to use default [1024 Mbps]."
+  rust_log:
+    name: "Log Level"
+    description: "Controls the verbosity of the RustDesk server logs. 'Info' is recommended for normal use. 'Debug' or 'Trace' can be used for troubleshooting."
+
+network:
+  21115/tcp: "RustDesk NAT Type Test"
+  21116/tcp: "RustDesk Main Server (Signaling, WebSocket)"
+  21116/udp: "RustDesk Main Server (Heartbeat, Hole Punching)"
+  21117/tcp: "RustDesk Relay Server (hbbr)"
+  21118/tcp: "RustDesk Web Client Support (hbbs)"
+  21119/tcp: "RustDesk Web Client Support (hbbr)"

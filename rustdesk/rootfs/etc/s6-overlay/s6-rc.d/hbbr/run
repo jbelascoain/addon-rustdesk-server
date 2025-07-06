@@ -1,0 +1,5 @@
+#!/command/with-contenv bashio
+bashio::log.info "RUNNING HBBR"
+cd /config
+PARAMS="-k _"
+/usr/bin/hbbr $PARAMS

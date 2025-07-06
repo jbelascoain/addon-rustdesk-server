@@ -1,0 +1,33 @@
+#!/command/with-contenv bashio
+sleep 3
+S6_ENV_DIR="/run/s6/container_environment"
+mkdir -p "${S6_ENV_DIR}"
+
+bashio::log.info "----------------------------------------------------"
+bashio::log.info "  Setting up global environment variables for s6..."
+bashio::log.info "----------------------------------------------------"
+
+echo -n "$(bashio::config 'key_pub')" > "${S6_ENV_DIR}/KEY_PUB"
+echo -n "$(bashio::config 'key_priv')" > "${S6_ENV_DIR}/KEY_PRIV"
+echo -n "$(bashio::config 'relay_server')" > "${S6_ENV_DIR}/RELAY"
+
+if [[ ! "$(bashio::config 'rust_log')" = "null" ]] ; then
+    echo -n "$(bashio::config 'rust_log')" > "${S6_ENV_DIR}/RUST_LOG"
+fi
+
+if [[ ! "$(bashio::config 'single_bandwidth')" = "null" ]] ; then
+    echo -n "$(bashio::config 'single_bandwidth')" > "${S6_ENV_DIR}/SINGLE_BANDWIDTH"
+fi
+
+if [[ ! "$(bashio::config 'total_bandwidth')" = "null" ]] ; then
+    echo -n "$(bashio::config 'total_bandwidth')" > "${S6_ENV_DIR}/TOTAL_BANDWIDTH"
+fi
+
+if bashio::config.true 'always_use_relay'; then
+    echo -n "Y" > "${S6_ENV_DIR}/ALWAYS_USE_RELAY"
+else
+    echo -n "N" > "${S6_ENV_DIR}/ALWAYS_USE_RELAY"
+fi
+
+
+bashio::log.info "Global environment variables are ready for all services."

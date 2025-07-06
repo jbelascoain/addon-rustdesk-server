@@ -1,14 +1,12 @@
 ---
 name: RustDesk Server
-version: 1.0.18
+version: 1.0.20
 slug: rustdesk_server
 description: RustDesk Server addon for Home Assistant
 arch:
   - aarch64
   - amd64
-  - armhf
   - armv7
-  - i386
 startup: services
 init: false
 codenotary: codenotary@jbelascoain.dev
@@ -16,11 +14,15 @@ apparmor: true
 host_network: false
 boot: auto
 options:
-  encrypted_only: true
-  relay_server: 127.0.0.1
+  always_use_relay: false
 schema:
-  encrypted_only: bool
-  relay_server: str
+  relay_server: str?
+  always_use_relay: bool
+  key_pub: "match(^([A-Za-z0-9+/]{43}=)?$)?"
+  key_priv: "match(^([A-Za-z0-9+/]{86}==)?$)?"
+  single_bandwidth: int?
+  total_bandwidth: int?
+  rust_log: list(off|error|warn|info|debug|trace)?
 ports:
   21115/tcp: 21115
   21116/tcp: 21116

@@ -1,0 +1,7 @@
+#!/command/with-contenv bashio
+bashio::log.info "RUNNING HBBS"
+sleep 2
+cd /config
+PARAMS="-k _"
+[ ! "$RELAY" = "null" ] && PARAMS="-r $RELAY $PARAMS"
+/usr/bin/hbbs $PARAMS
