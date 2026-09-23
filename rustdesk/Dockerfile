@@ -1,8 +1,15 @@
-ARG BUILD_FROM
+ARG BUILD_FROM=ghcr.io/hassio-addons/base:21.0.5
 FROM ${BUILD_FROM}
 
-ARG RUSTDESK_SERVER_VERSION
-ARG BUILD_ARCH
+ARG RUSTDESK_SERVER_VERSION="1.1.16"
+ARG BUILD_ARCH="amd64"
+ARG BUILD_VERSION="dev"
+
+LABEL \
+  io.hass.name="RustDesk Server" \
+  io.hass.description="RustDesk Signal and Relay Server" \
+  io.hass.type="app" \
+  io.hass.version="${BUILD_VERSION}"
 
 RUN \
     apk update && \
@@ -10,7 +17,6 @@ RUN \
         unzip \
     \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then RUSTDESK_SERVER_ARCH="arm64v8"; \
-        elif [ "${BUILD_ARCH}" = "armhf" ]; then RUSTDESK_SERVER_ARCH="armv7"; \
         else RUSTDESK_SERVER_ARCH="${BUILD_ARCH}";fi \
     \
     && curl -J -L -o /tmp/rustdesk_server.zip \

@@ -1,5 +1,5 @@
 #!/command/with-contenv bashio
-bashio::log.info "RUNNING HBBS"
+bashio::log.info "RUNNING HBBS Version: $(/usr/bin/hbbs --version)"
 sleep 2
 cd /config
 PARAMS="-k _"

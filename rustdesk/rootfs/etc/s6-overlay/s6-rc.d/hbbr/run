@@ -1,5 +1,5 @@
 #!/command/with-contenv bashio
-bashio::log.info "RUNNING HBBR"
+bashio::log.info "RUNNING HBBR Version: $(/usr/bin/hbbr --version)"
 cd /config
 PARAMS="-k _"
 /usr/bin/hbbr $PARAMS
