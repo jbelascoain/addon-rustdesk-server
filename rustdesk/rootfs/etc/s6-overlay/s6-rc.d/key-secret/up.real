@@ -1,7 +1,6 @@
 #!/command/with-contenv bashio
 sleep 2
 bashio::log.info "RUNNING KEYS"
-printenv
 if [ ! -d /config ] ; then
 mkdir /config
 fi

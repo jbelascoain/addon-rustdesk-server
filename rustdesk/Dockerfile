@@ -31,7 +31,7 @@ COPY rootfs /
 
 EXPOSE 21115 21116 21116/udp 21117 21118 21119
 
-HEALTHCHECK --interval=10s --timeout=5s CMD /usr/bin/healthcheck.sh
+HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 CMD /usr/bin/healthcheck.sh
 
 WORKDIR /config
 VOLUME /config

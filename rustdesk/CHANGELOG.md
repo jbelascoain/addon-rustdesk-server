@@ -1,5 +1,10 @@
 # Changelog
 
+# [1.1.1]
+* **healthcheck:** Probe TCP listen ports instead of `s6-svstat`, which failed under AppArmor and made Supervisor watchdog restart-loop a healthy `hbbs`/`hbbr`.
+* **healthcheck:** Add a 30s Docker start-period so the first bind is not marked unhealthy.
+* **security:** Stop dumping the full process environment (including keys and Supervisor tokens) at key setup.
+
 # [1.1.0]
 * **app-base:** Update image base ([21.0.5](https://github.com/hassio-addons/app-base/releases/tag/v21.0.5))
 

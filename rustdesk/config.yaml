@@ -1,6 +1,6 @@
 ---
 name: RustDesk Server
-version: 1.1.0
+version: 1.1.1
 slug: rustdesk_server
 description: RustDesk Server addon for Home Assistant
 arch:
